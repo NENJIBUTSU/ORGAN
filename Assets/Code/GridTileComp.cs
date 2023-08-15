@@ -1,51 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Array2DEditor;
 
-[CreateAssetMenu(menuName = "Swagger"), System.Serializable]
+[CreateAssetMenu(menuName = "Swag/Swagger")]
 public class GridTileComp : ScriptableObject
 {
-    int width, height;
-    GridTileMDArray tileGrid;
-}
+    [SerializeField]
+    private Array2DBool shape = null;
 
-public class GridTileMDArray : MonoBehaviour, ISerializationCallbackReceiver
-{
-    public GridTileObject[,] unserializable = new GridTileObject[5, 5];
-    [SerializeField, HideInInspector] private List<Package<GridTileObject>> serializable;
+    [SerializeField]
+    TileType compTileType;
 
-    [System.Serializable]
-    struct Package<TElement>
+    public void PlaceOnGrid(Grid<GridTileObject> grid, Vector2Int gridPosition) // this works off of the top left corner
     {
-        public int Index0;
-        public int Index1;
-        public TElement Element;
-        public Package(int idx0, int idx1, TElement element)
-        {
-            Index0 = idx0;
-            Index1 = idx1;
-            Element = element;
-        }
-    }
+        var cells = shape.GetCells();
 
-    public void OnBeforeSerialize()
-    {
-        serializable = new List<Package<GridTileObject>>();
-        for (int i = 0; i < unserializable.GetLength(0); i++)
+        for (int x = 0; x < shape.GridSize.x; x++)
         {
-            for (int j = 0; j < unserializable.GetLength(1); j++)
+            for (int y = 0; y < shape.GridSize.y; y++)
             {
-                serializable.Add(new Package<GridTileObject>(i, j, unserializable[i, j]));
+                if (cells[x, y])
+                {
+                   GridTileObject obj = grid.GetGridObject(x + gridPosition.x, y + gridPosition.y);
+                   obj.SetType(compTileType);
+                }
             }
-        }
-    }
-
-    public void OnAfterDeserialize()
-    {
-        unserializable = new GridTileObject[5, 5];
-        foreach (var package in serializable)
-        {
-            unserializable[package.Index0, package.Index1] = package.Element;
         }
     }
 }

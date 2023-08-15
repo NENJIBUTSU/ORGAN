@@ -6,6 +6,7 @@ using NenjiUtils;
 public class TestGrid : MonoBehaviour
 {
     private Grid<GridTileObject> testGrid;
+    private int tileTypeCounter = 1;
 
     void Start()
     {
@@ -22,7 +23,15 @@ public class TestGrid : MonoBehaviour
 
             if (obj != null)
             {
-                obj.SetType(TileType.Cut);
+                obj.SetType((TileType)tileTypeCounter);
+                if (tileTypeCounter < 5)
+                {
+                    tileTypeCounter++;
+                }
+                else
+                {
+                    tileTypeCounter = 1;
+                }
             }
 
         }
