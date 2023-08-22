@@ -9,10 +9,15 @@ public class GridTileObject : IGridObject
     
     private TileType type;
 
-    public void SetType(TileType type)
+    public void SetTileType(TileType type)
     {
         this.type = type;
         this.OnGridValueChanged?.Invoke();
+    }
+
+    public TileType GetTileType()
+    {
+        return type;
     }
 
     public override string ToString()

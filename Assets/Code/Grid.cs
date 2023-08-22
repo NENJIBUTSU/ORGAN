@@ -44,7 +44,6 @@ public class Grid<TGridObject> where TGridObject : IGridObject
                 gridArray[x, y] = createGridObject();
                 Debug.Log("Object at " + x + "," + y + " created!");
                 gridArray[x, y].OnGridValueChanged += () => { Debug.Log("[" + x1 + ", " + y1 + "] was changed!"); };
-                Debug.Log("Event on " + gridArray.ToString() + " created at " + x + "," + y + "!");
 
                 gridArray[x, y].OnGridValueChanged += () => { OnGridObjectChanged?.Invoke(this, new OnGridObjectChangedEventArgs { x = x1, y = y1 }); }; //this is likely to cause a memory leak. FIX!!!!
             }
@@ -117,7 +116,7 @@ public class Grid<TGridObject> where TGridObject : IGridObject
         return new Vector3(x, y) * tileSize + originPosition;
     }
 
-    private void GetGridPosition(Vector3 worldPosition, out int x, out int y)
+    public void GetGridPosition(Vector3 worldPosition, out int x, out int y)
     {
         x = Mathf.FloorToInt((worldPosition - originPosition).x / tileSize);
         y = Mathf.FloorToInt((worldPosition -originPosition).y / tileSize);

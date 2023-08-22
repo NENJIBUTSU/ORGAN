@@ -6,11 +6,13 @@ using NenjiUtils;
 public class TestGrid : MonoBehaviour
 {
     private Grid<GridTileObject> testGrid;
-    private int tileTypeCounter = 1;
+
+    [SerializeField]
+    GridTileComp currentTileComp;
 
     void Start()
     {
-        testGrid = new Grid<GridTileObject>(5, 5, 2.5f, new Vector3(-7.5f, -7.5f, 0), false, true, () => new GridTileObject());
+        testGrid = new Grid<GridTileObject>(5, 5, 10f, new Vector3(-25f, -25f, 0), true, true, () => new GridTileObject());
     }
 
     private void Update()
@@ -19,21 +21,16 @@ public class TestGrid : MonoBehaviour
         {
             Vector3 position = MouseUtils.GetMouseWorldPosition2D();
 
-            GridTileObject obj = testGrid.GetGridObject(position);
+            testGrid.GetGridPosition(position, out int gridX, out int gridY);
 
-            if (obj != null)
-            {
-                obj.SetType((TileType)tileTypeCounter);
-                if (tileTypeCounter < 5)
-                {
-                    tileTypeCounter++;
-                }
-                else
-                {
-                    tileTypeCounter = 1;
-                }
-            }
+            Debug.Log(gridX + "," + gridY);
 
+            currentTileComp.PlaceOnGrid(testGrid, new Vector2Int(gridX - Mathf.FloorToInt(currentTileComp.shape.GridSize.x / 2), gridY + Mathf.FloorToInt(currentTileComp.shape.GridSize.y / 2)));
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            currentTileComp.RotateComp();
         }
     }
 }
