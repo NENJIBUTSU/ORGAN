@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Array2DEditor;
 
-[CreateAssetMenu(menuName = "Tetris Tiles/Tile Composition")]
-public class GridTileComp : ScriptableObject
+public class GridTileShape : MonoBehaviour
 {
     [SerializeField]
     public Array2DBool shape = null; //make sure this is square
