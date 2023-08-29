@@ -5,11 +5,17 @@ using Array2DEditor;
 
 public class GridTileShape : MonoBehaviour
 {
-    [SerializeField]
-    public Array2DBool shape = null; //make sure this is square
+    private Array2DBool shape = null; //make sure this is square
+    private TileType compTileType;
 
-    [SerializeField]
-    TileType compTileType;
+    public Vector2Int GridSize { get { return shape.GridSize; } }
+
+    public GridTileShape(Array2DBool shape, TileType tileType)
+    {
+        this.shape = shape;
+        this.compTileType = tileType;
+    }
+
 
     public bool PlaceOnGrid(Grid<GridTileObject> grid, Vector2Int gridPosition) // this works off of the bottom left corner
     {

@@ -5,14 +5,31 @@ using NenjiUtils;
 
 public class TestGrid : MonoBehaviour
 {
+
     private Grid<GridTileObject> testGrid;
 
-    [SerializeField]
-    GridTileComp currentTileComp;
 
-    void Start()
+    public GridTileShapeDefinition CurrentShapeDefinition 
+    {
+        get
+        {
+            return _currentShapeDefinition;
+        }
+        set
+        {
+            _currentShapeDefinition = value;
+            currentShape = value.Create();
+        }
+    }
+
+    private GridTileShapeDefinition _currentShapeDefinition;
+
+    private GridTileShape currentShape;
+
+    private void Start()
     {
         testGrid = new Grid<GridTileObject>(5, 5, 10f, new Vector3(-25f, -25f, 0), true, true, () => new GridTileObject());
+        currentShape = _currentShapeDefinition.Create();
     }
 
     private void Update()
@@ -25,12 +42,12 @@ public class TestGrid : MonoBehaviour
 
             Debug.Log(gridX + "," + gridY);
 
-            currentTileComp.PlaceOnGrid(testGrid, new Vector2Int(gridX - Mathf.FloorToInt(currentTileComp.shape.GridSize.x / 2), gridY + Mathf.FloorToInt(currentTileComp.shape.GridSize.y / 2)));
+            currentShape.PlaceOnGrid(testGrid, new Vector2Int(gridX - Mathf.FloorToInt(currentShape.GridSize.x / 2), gridY + Mathf.FloorToInt(currentShape.GridSize.y / 2)));
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            currentTileComp.RotateComp();
+            currentShape.RotateComp();
         }
     }
 }
