@@ -13,10 +13,13 @@ public class Grid<TGridObject> where TGridObject : IGridObject
         public int y;
     }
 
-
+    public float TileSize { get { return tileSize; } }
     float tileSize;
-    int width;
-    int height;
+    public int Width { get { return width; }}
+    public int Height{ get { return height;}}
+
+    private int height;
+    private int width;
 
     bool showDebugLines;
     bool showDebugText;
@@ -45,7 +48,7 @@ public class Grid<TGridObject> where TGridObject : IGridObject
                 Debug.Log("Object at " + x + "," + y + " created!");
                 gridArray[x, y].OnGridValueChanged += () => { Debug.Log("[" + x1 + ", " + y1 + "] was changed!"); };
 
-                gridArray[x, y].OnGridValueChanged += () => { OnGridObjectChanged?.Invoke(this, new OnGridObjectChangedEventArgs { x = x1, y = y1 }); }; //this is likely to cause a memory leak. FIX!!!!
+                gridArray[x, y].OnGridValueChanged += () => { TriggerGridObjectChanged(x1,y1); }; //NOTE: Does this still cause a potential memory leak? Should be unsubscribable now.
             }
         }
 
@@ -105,13 +108,10 @@ public class Grid<TGridObject> where TGridObject : IGridObject
 
     public void TriggerGridObjectChanged(int x, int y)
     {
-        if (OnGridObjectChanged != null)
-        {
-            OnGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
-        }
+            OnGridObjectChanged?.Invoke(this, new OnGridObjectChangedEventArgs { x = x, y = y });
     }
 
-    private Vector3 GetWorldPosition(int x, int y)
+    public Vector3 GetWorldPosition(int x, int y)
     {
         return new Vector3(x, y) * tileSize + originPosition;
     }
